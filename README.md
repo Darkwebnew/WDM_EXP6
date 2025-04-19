@@ -16,17 +16,13 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
 
 ### Program:
 ```
-import requests
-from bs4 import BeautifulSoup
+import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 import string
-import nltk
 
-nltk.download('punkt')
-nltk.download('stopwords')
+# Load spaCy's English tokenizer
+nlp = spacy.load("en_core_web_sm")
 
 # Sample documents stored in a dictionary
 documents = {
@@ -36,10 +32,10 @@ documents = {
     "doc4": "Is this the first document?",
 }
 
-# Preprocessing function to tokenize and remove stopwords/punctuation
+# Preprocessing function to tokenize and remove stopwords/punctuation using spaCy
 def preprocess_text(text):
-    tokens = word_tokenize(text.lower())
-    tokens = [token for token in tokens if token not in stopwords.words("english") and token not in string.punctuation]
+    doc = nlp(text.lower())
+    tokens = [token.text for token in doc if token.text not in nlp.Defaults.stop_words and token.text not in string.punctuation]
     return " ".join(tokens)
 
 # Preprocess documents and store them in a dictionary
